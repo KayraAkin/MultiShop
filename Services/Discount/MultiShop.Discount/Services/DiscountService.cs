@@ -32,7 +32,7 @@ namespace MultiShop.Discount.Services
         {
             string query = "delete from Coupons where CouponId = @couponId";
             var parameters = new DynamicParameters();
-            parameters.Add("couponId", id);
+            parameters.Add("@couponId", id);
             using( var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
@@ -53,10 +53,10 @@ namespace MultiShop.Discount.Services
         {
             string query = "select * from Coupons where CouponId=@couponId";
             var parameters = new DynamicParameters();
-            parameters.Add("couponId", id);
+            parameters.Add("@couponId", id);
             using(var connections = _context.CreateConnection())
             {
-                var values = await connections.QueryFirstOrDefaultAsync<GetByIdDiscountCouponDto>(query);
+                var values = await connections.QueryFirstOrDefaultAsync<GetByIdDiscountCouponDto>(query, parameters);
                 return values;
             }
         }
@@ -69,6 +69,7 @@ namespace MultiShop.Discount.Services
             parameters.Add("@rate", updateCouponDto.Rate);
             parameters.Add("@isActive", updateCouponDto.IsActive);
             parameters.Add("@validDate", updateCouponDto.ValidDate);
+            parameters.Add("@couponId", updateCouponDto.CouponId);
             using (var connection = _context.CreateConnection())
             {
                 await connection.ExecuteAsync(query, parameters);
